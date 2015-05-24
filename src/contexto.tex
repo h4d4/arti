@@ -1,1 +1,111 @@
 \section{Contexto}
+\subsection{Técnicas de análisis de código}
+\subsubsection{Análisis estático y dinámico}
+Las soluciones propuestas para detectar fuga de información en aplicaciones
+Android, se enmarcan en el análisis estático o dinámico de la aplicación, en
+algunos casos, se combinan ambos tipos.\newline 
+En \textbf{análisis estático}\cite{Static-dynamic}, se estudia el código del
+programa para inferir todos los posibles caminos de ejecución. Esto se logra
+construyendo modelos de estado del programa, y determinando los estados posibles
+a alcanzar por el programa.
+No obstante, debido a que existen múltiples posibilidades de ejecución, se opta
+por construir un modelo abstracto de los estados del programa. La consecuencia
+de tener un modelo aproximado es pérdida de información y posibilidad de menor
+precisión en el análisis.\newline 
+Por otro lado, en \textbf{análisis dinámico} se ejecuta el programa y se analiza
+su comportamiento, verificando el camino de ejecución que ha tomado el programa.
+Esa exactitud en la ejecución que se verifica da precisión al análisis, porque
+no es necesario construir un modelo aproximado de todos los posibles caminos de
+ejecución.
+
+\subsubsection{Detectar o garantizar políticas de seguridad} 
+Generalmente, para verificar el cumplimiento de políticas de seguridad mediante
+análisis estático, se aplican técnicas de seguridad de tipado
+(Typed-Inference/Security-Typed Analysis) y técnicas de flujo de
+datos(Data/Control Flow Analysis)\cite{Information-Flow-Java}.\newline 
+Con \textbf{técnicas Security-Typed} las propiedades de confidencialidad e
+integridad son anotadas en el código, y verificadas a tiempo de compilación,
+garantizando su cumplimiento a tiempo de ejecución.\newline 
+Con \textbf{técnicas de flujo de control} y \textbf{técnicas de flujo de datos},
+las políticas de seguridad son verificadas haciendo seguimiento al control de
+flujo, o al flujo de datos, respectivamente. Estás técnicas suelen utilizar
+grafos de Control de Flujo CFG(Control Flow Graph), Grafos de Flujo de Datos
+DFG( Data Flow Graph) y Grafos de llamadas CG (Call Graphs).
+
+\subsubsection{Security Typed Languages}
+Las herramientas basadas en técnicas de análisis Security-Typed, involucran
+conceptos como flujo de información, políticas de confidencialidad e integridad,
+y chequeo de tipos.
+\emph{Flujo de información}: el flujo de información describe el
+comportamiento de un programa, desde la entrada de los datos hasta la salida de
+los mismos.\newline 
+\emph{Políticas de confidencialidad e integridad}: confidencialidad e integridad
+son políticas de seguridad aplicables mediante control de flujo de información.
+Mientras la confidencialidad busca prevenir que la información fluya hacia
+destinos no apropiados, la integridad busca prevenir que la información provenga
+de fuentes no apropiadas\cite{LanguageIFS-2013}.\newline
+\emph{Chequeo de tipos}: al usar un lenguaje tipado de seguridad, las políticas
+son definidas a través del lenguaje, porque son expresadas mediante anotaciones
+en el código fuente del programa a verificar, y su evaluación se realiza
+mediante chequeo de tipos.\newline 
+El chequeo de tipos consiste en una técnica estática,
+también utilizada para analizar flujo de información durante la compilación de
+un programa, más específicamente en la etapa de análisis semántico, el
+compilador identifica el tipo para cada expresión del programa y verifica que
+corresponda al contexto de la expresión.
+Bajo este principio de chequeo, lenguajes tipados de seguridad aplican
+políticas de control de flujo, definiendo para cada expresión del programa un
+tipo de seguridad(security type), de la forma:  tipo de dato y label de
+seguridad(security label). Donde el label de seguridad regula el uso del dato,
+acorde a su tipo.\newline 
+El compilador realiza el chequeo de tipos, partiendo del conjunto de labels de
+seguridad. Así, si el programa pasa el chequeo de tipos y compila correctamente,
+se espera que cumpla con las políticas de control de flujo evaluadas.
+
+\subsection{Background}
+\subsubsection{Sistema de anotaciones en Jif}
+Jif es un lenguaje tipado de seguridad que extiende al lenguaje Java con labels
+de seguridad, a través de los cuales se especifican restricciones de cómo
+debería ser utilizada la información. Jif está compuesto por un compilador y un
+sistema de anotaciones.\newline
+El análisis de flujo de información de aplicativos Java mediante Jif, requiere
+su implementación haciendo uso del sistema de anotaciones de Jif, de modo que se
+especifiquen las políticas de seguridad a evaluar.
+Tal implementación se basa en adicionar labels de seguridad a la definición
+de métodos, variables, arrays, etc; los labels de seguridad no especificados son
+generados automáticamente con labels por defecto.\newline
+%http://www.cs.cornell.edu/jif/doc/jif-3.3.0/language.html#inference.
+La verificación del cumplimiento de las políticas de seguridad, tiene lugar
+durante la compilación del aplicativo, allí el compilador Jif aplica chequeo de
+labels(label checking)\cite{jifRef},  verificando que los flujos de información
+generados cumplen con las restricciones establecidas.
+
+\subsubsection{DML(Decentralized Label Model)}
+Jif basa su sistema de anotaciones en el modelo de etiquetas DLM, donde se
+manejan tres elementos fundamentales: Principals, Políticas y Labels.\newline
+Principals: un principal es una entidad con autoridad para observar y cambiar
+aspectos del sistema. Un programa pertenece a un principal, quien determina el
+comportamiento que este debería tener. Jif cuenta con una serie de principals ya
+definidos, por ejemplo, Alice, Bob, Chunck, etc, que pueden ser
+utilizados al momento de anotar.\newline 
+Políticas: mediante políticas de seguridad el dueño de la política, que es el
+principal que la define, determina qué otros principals pueden leer o
+influenciar la información. Así, una política puede ser de confidencialidad o de
+integridad, y se especifican de la forma: \{owner: reader list\} u
+\{owner: writer list\}.\newline 
+Labels: un label consiste en un conjunto de políticas de confidencialidad e
+integridad. Los labels se escriben en las expresiones del programa que se
+anota(labels de seguridad), esto es métodos, variables, arrays, etc.\newline 
+En síntesis, las políticas de seguridad definen que principals pueden leer o
+modificar la información, y esas políticas se expresan mediante labels.
+
+\subsubsection{Label Checking}
+Para hacer seguimiento al flujo de información de un programa, el compilador de
+Jif asocia un label al program counter de cada punto del programa,
+progam-counter label(\underline{pc}). En cada punto del programa, el
+(\underline{pc}) representa la información que podría conocerse tras la
+ejecución de ese punto del programa.
+El (\underline{pc}) es afectado por los labels con que se define cada sentencia
+y expresión del programa, por tanto este es considerado como el límite
+superior(máxima información que podría conocerse) de los labels que han afectado
+el flujo de información para llegar a un determinado punto de ejecución.\newline
