@@ -19,10 +19,11 @@ aplicativos Android, verificando que cumplan con las políticas de seguridad que
 el desarrollador ha definido.\newline 
 El Setup de Jif para Android consiste en las clases de la API Android con
 anotaciones Jif(Anotaciones a la API), estas
-anotaciones son necesarias porque la API permite que la aplicación escriba o lea
-información de los sources y los sinks, generando flujos de información entre
-estos. En consecuencia, para analizar el flujo de información entre sources y
-sinks se requiere anotar las clases de la API.\newline
+anotaciones son necesarias porque es a través de API que la aplicación escribe o
+lee información de los sources y los sinks, generando flujos de información
+entre estos. En consecuencia, para analizar flujo de información entre sources y
+sinks con el sistema de anotaciones de Jif, es necesario anotar las clases
+de la API.\newline 
 No obstante, para efectos del presente trabajo se limita el Setup de Jif,
 partiendo de una política de seguridad específica.
 Por consiguiente, el diseño se centra en soportar un conjunto reducido de clases
@@ -72,9 +73,9 @@ analizar(lineamientos del anotador).
 
 \subsection{Definición de la política de seguridad}
 % \textit{Definición de la política de seguridad}:
-Detectar si una aplicación Android presenta flujos de información entre,
+Detectar si una aplicación Android presenta flujos de información entre:
 información con nivel de seguridad alto e información con nivel de seguridad bajo.\newline
-\textit{Información considerada con nivel de seguridad alto}: la información
+\textit{Información con nivel de seguridad alto}: la información
 catalogada con nivel de seguridad alto hace referencia a un conjunto de sources.
 Los sources representan información confidencial o privada del usuario, por
 tanto, este quisiera tener el control de hacia donde se dirige tal información.
@@ -83,7 +84,7 @@ getSimSerialNumber, findViewById, getLatitude, getLongitude y getSubscriberId.
 Adicional a estos métodos, se incluye el tipo de dato EditText, si y sólo si, el
 campo UI al que referencia corresponde a un campo tipo textPassword, campos
 destinados a almacenar contraseñas.\newline 
-\textit{Información considerada con nivel de seguridad bajo}: la
+\textit{Información con nivel de seguridad bajo}: la
 información considerada con nivel de seguridad bajo, comprende un conjunto
 de sinks. Los sinks son canales que permiten la salida de información del
 dispositivo, por ejemplo, los mensajes de texto. El conjunto de sinks
@@ -97,21 +98,23 @@ Los lineamientos de anotación definen los elementos básicos de anotación
 \ref{subsec:api} y anotaciones en los aplicativos a analizar \ref{subsec:anotador}.
 
 \subsubsection{Elementos básicos de anotación}
+\label{subsec:elements}
 Para anotar la información con su respectivo nivel de seguridad alto o bajo, de
 modo que, partiendo de tales anotaciones se evalúe la existencia de flujos de
 información entre información con nivel de seguridad alto e información con
 nivel de seguridad bajo, se define una autoridad para los programas, también se
-definen los labels de seguridad para especificar las políticas de seguridad.
-Así:\newline Principal \emph{Alice}: haciendo uso de los principals ya definidos en Jif, se
+definen las etiquetas de seguridad para especificar las políticas de seguridad.
+Así:\newline 
+Principal \emph{Alice}: haciendo uso de los principales ya definidos en Jif, se
 establece al principal \emph{Alice} como la autoridad máxima. Este principal
 tendrá todo el poder para actuar sobre aspectos de los programas.\newline
-Política para anotar información con nivel de seguridad alto: el label de
+Política para anotar información con nivel de seguridad alto: la etiqueta de
 seguridad \emph{\{Alice:\}},  indica que la información tiene nivel seguridad
 alto, es decir, que se trata de información sensible o privada.\\
 Variables con nivel de seguridad alto deben ser anotadas con tal label de
 seguridad, porque esté específica que sólo el dueño de la información(Alice)
 puede acceder a la misma.\newline 
-Política para anotar información con nivel de seguridad bajo: el label de
+Política para anotar información con nivel de seguridad bajo: la etiqueta de
 seguridad \emph{\{\}}, indica que la información tiene nivel de seguridad bajo,
 es decir, información de conocimiento público.\newline
 
@@ -127,39 +130,68 @@ es decir, información de conocimiento público.\newline
 	\caption{Mecanismos de anotación para clases de la API.}
 	\label{fig:annotationsMechanims}  
 \end{figure}
-
-Para controlar el flujo de información que se envía hacia sinks, la
+dado que la API de Android provee las librerías necesarias para implementar las
+funcionalidades de una aplicación Android, permitiendo a su vez, que el
+aplicativo escriba o lea información de los métodos sources y sinks, las clases
+pertenecientes a la API generan flujos de información. Así, para verificar la
+política de seguridad previamente definida, se requieren anotaciones tanto a las
+clases que definen los sources y sinks en que se centra la política, como
+anotaciones a clases y librerías requeridas en la implementación de componentes
+como actividades, servicios y broadcast receivers.\newline 
+En el caso de los sinks la anotación tiene un propósito adicional, este es,
+controlar el flujo de información que se envía a través de los mismos, la
 definición de los métodos de las clases Log y SmsManager de la API Android,
-deben anotarse de tal manera que, se controle el nivel de desde el
-punto del programa donde es invocado el método, y el nivel de seguridad de los
-argumentos con que se invocan tales métodos.\newline 
-Para ello se recurre a los principios que regulan el llamado a métodos
-en el sistema de anotaciones de Jif, entre los cuales está que, el nivel de
+deben anotarse de tal manera que, se controle el nivel de seguridad de los
+argumentos con que se invocan tales métodos.\newline Para esto se utilizan las
+etiquetas de seguridad que regulan el llamado a métodos en el sistema de
+anotaciones de Jif(sintaxis de anotación \ref{sssec:sintaxis}), estas son Begin
+Label(BL) y Argument Label(AL).\newline 
+Con las etiquetas para el BL se determinan los puntos del programa desde donde
+puede invocarse el método, de este modo, el método podrá ser invocado sí, el
+nivel de seguridad del punto del programa desde donde se llama el método es
+menor o igual de restrictivo que el BL con que ha sido definido el método. Para
+el presente caso se busca que un método pueda ser invocado desde cualquier punto
+del programa.\newline
+
+Con las etiquetas para los argumentos del método, AL, se controla el nivel de
+seguridad de los argumentos con que se invoca el método. Por tanto, el nivel de
 seguridad de los argumentos con que se invoca un método, debe ser menor o igual
-de restrictivo que los labels de seguridad con que se ha definido
-el método.
-Tomando como ejemplo el método sendTextMessage de
-la clase SmsManager, mediante el cual se envían mensajes de texto:
+de restrictivo que el nivel de seguridad con que han sido definidos los
+argumentos del método.\newline
+El nivel de restricción de la información se evalua de acuerdo a las
+etiquetas de seguridad con que de defina e invoque el método. De este modo,
+información con nivel de seguridad alto es más restrictiva que información con nivel de
+seguridad bajo.
+Aterrizando estos conceptos a los elementos definidos en la sección
+\ref{subsec:lineamientos}, información anotada con el label \emph{\{Alice:\}} es
+más restrictiva que información anotada con el label \emph{\{\}}. Puesto que, el
+primer label denota que la información tiene nivel de seguridad alto, mientras
+que el segundo, indica que la información tiene nivel de segurodad bajo.\newline 
+Tomando como ejemplo el método sendTextMessage de la clase SmsManager, mediante
+el cual se envían mensajes de texto:
 \begin{lstlisting}[basicstyle=\scriptsize]
 sendTextMessage(String destinationAddress, String scAddress, 
-String text, PendingIntent sentIntent, 
-PendingIntent deliveryIntent)
+	String text, PendingIntent sentIntent, 
+	PendingIntent deliveryIntent){}
 \end{lstlisting}
 
-Se tiene que el parámetro \emph{text} es el que recibe la información a mostrar,
+Se tiene que el parámetro \emph{text} es el que recibe la información a enviar,
 y por tanto esa información debe ser pública.\newline 
-Por consiguiente, en la definición del método el label de seguridad del
-argumento(AL) correspondiente a la información a mostrar(logs) o la información
-a enviar(sms), se anota con el label de seguridad bajo(label público\{\}). Con
-esto se garantiza que la información se muestra o envía, si y sólo si, el nivel
-de seguridad del argumento con que se invoca el método es público. Por ejemplo,
+Por consiguiente, en la definición del método la etiqueta de seguridad del
+argumento(AL) correspondiente a la información a enviar(sms), se anota con la
+etiqueta \{\}(Política para anotar información con nivel de seguridad bajo). Con
+esto se garantiza que la información se envía, si y sólo si, el nivel de
+seguridad del argumento con que se invoca el método es menor o igual de
+restrictivo que la etiqueta pública \{\}; Dado que, no se tiene una etiqueta de
+seguridad menos restrictiva que esta, se garantiza que la información sólo es
+envíada, si efectivamente está anotada con tal etiqueta, es decir, si se trata
+de información pública.\newline 
+Por ejemplo,
 si el método se invoca con información anotada con label de seguridad alto, se
 genera un flujo de información indebido, dando lugar a un error en la
 compilación del programa que le llama.\newline 
-El resto de argumentos del método se anotan con label de seguridad \{Alice:\},
-puesto que esa información puede ser pública o privada.\newline
-En el caso del BL al anotarlo con el label \{Alice:\}, se permite que el método
-sea invocado desde cualquier punto de un programa. 
+En el caso del BL al anotarlo con la etiqueta \{Alice:\}, se permite que el
+método sea invocado desde cualquier punto de un programa. 
 Para el resto de labels se dejan los que Jif genera por defecto.\newline
 % cualquier punto de un programa que sea igual o menor de restrictivo que el
 % principal Alice, esto se traduce en que podrá ser invocado desde cualquier punto
@@ -168,7 +200,7 @@ Para el resto de labels se dejan los que Jif genera por defecto.\newline
 % método sea utilizado. Poner ejemplo XXXX?\newlie
 Continuando con el ejemplo del método sendTextMessage y aplicando lo
 anteriormente descrito, este método se anota de la siguiente manera:
-\begin{lstlisting}
+\begin{lstlisting}[basicstyle=\scriptsize]
 sendTextMessage{Alice:}(String{Alice:} destinationAddress, 
 	String{Alice:}scAddress, 
 	String{} text, 
@@ -176,14 +208,55 @@ sendTextMessage{Alice:}(String{Alice:} destinationAddress,
 	PendingIntent{Alice:} deliveryIntent) { }
 \end{lstlisting}
 
+El principio de anotación propuesto es aplicable para los métodos de la clase
+Log, ya que estos también representan sinks.\newline 
+Tales criterios de anotación son aplicados a través del mecanismo fundamental de
+anotación que provee el sistema de anotaciones de Jif, en el cual se implementa
+la respectiva versión Jif de la clase, esto es, anotando con etiquetas de
+seguridad las variables, definición y cuerpo de los métodos de la clase.
+Adicional a este mecanismo de anotación(mecanismo de
+anotación\footnote{Para hacer referencia a los mecanismos con que se integra al
+sistema de anotaciones de Jif, las diferentes clases de la API, se adoptan los
+nombres: mecanismo de anotación, mecanismo de signaturas nativas y mecanismo de
+signaturas nativas más labels de seguridad.}), el compilador provee un mecanismo
+que permite interactuar con código de clases Java ya
+existentes\cite{annotations-Jif}, para esto, se recurre a signaturas nativas.
+Así, se implementa una versión Jif de una clase Java ya existente, en la que se
+declaran signaturas nativas proveídas por Jif, constructor y métodos necesarios
+de la clase(mecanismo de signaturas nativas).
+Al mecanismo de signaturas nativas también se puede  adicionar labels de
+seguridad(mecanismo de signaturas nativas más labels de seguridad).\newline 
+Esos mecanismos adicionales, son aplicados para el resto de clases requeridas en
+la verificación de la política de seguridad definida, la figura
+\ref{fig:annotationsMechanims} muestra el total de clases a ser anotadas y el
+mecánismo utilizado.
 
-
-
-
-
-
-
-
+\subsubsection{Anotaciones en los aplicativos a analizar}
+\label{subsec:anotador}
+\begin{figure}[t!]
+	\begin{center}
+	\includegraphics[width=6cm]{desingSolution2-2.jpg}
+	\end{center}
+	\caption{Entradas y salidas para el generador de anotaciones.\newline
+	Para generar la versión anotada del aplicativo a analizar, el anotador parte
+	del código fuente del aplicativo, la política de seguridad definida en
+	\ref{subsection:politica} y el conjunto de sources y sinks implicados en la misma.}
+	\label{fig:desingSolution}
+\end{figure}
+Si bien, el desarrollador debe implementar manualmente las anotaciones en el
+aplicativo a análizar, acorde a las políticas de seguridad a verificar; en el
+presente diseño de solución, se incluye un generador de anotaciones que
+automatiza la anotación requerida por el desarrollador. Como se ilustra en la
+figura \ref{fig:desingSolution}, el generador de anotaciones retorna la versión
+anotada del aplicativo a analizar, partiendo del código fuente del aplicativo,
+una política de seguridad y el conjunto de sources y sinks necesarios para
+verificar la política de seguridad.\newline
+La anotación del aplicativo se fundamenta en identificar la declaración de
+sources, y en verificar qué métodos influencian esa información, de modo que,
+cuando la información sea enviada a través de sinks, tenga el nivel de seguridad
+adecuado. La anotación se condensa en una serie de pasos en las que se adicionan
+los labels de seguridad definidos en los elementos básicos de anotación
+\label{subsec:elements}.
 
 
 

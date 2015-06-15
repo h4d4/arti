@@ -1,4 +1,45 @@
 \section{Contexto}
+\subsection{Aplicaciones Android}
+En esencia una aplicación Android es una aplicación Java con interfaces
+descritas en sintaxis XML, cuya ejecución es activada por el framework la API
+Android.\newline 
+El framework de Aplicación Android ofrece diferentes funcionalidades de
+operación del sistema, proporcionando información de los servicios ofrecidos por
+el teléfono. Por ejemplo, provee información de la ubicación del
+usuario.\newline 
+Así pues, una aplicación Android obtiene del framework, clases e interfaces
+necesarias para implementar sus funcionalidades.
+
+Por otro lado, el SDK, Android Software Development Toolkit, permite compilar
+la aplicación a una versión ejecutable por dispositivos Android, esto es, código
+Dalvik bytecode(.dex). Adicionalmente, el SDK genera el APK, Android Application
+Package, donde empaqueta todo el código de la aplicación, incluyendo el
+bytecode. El APK es un archivo con extensión .apk, y es el que finalmente se
+instala en el dispositivo para obtener las funcionalidades de la aplicación.
+
+En lo que respecta a su estructura, 
+una aplicación Android puede integrarse por uno o más de los siguientes
+componentes: Activities, Services, Content Providers y Broadcast Receivers.\\
+Las actividades representan acciones a ejecutar por el usuario, permiten que el
+usuario se comunique con la aplicación.\\
+Los servicios son componentes de aplicación que ejecutan tareas en background.\\
+Los proveedores de contenido son componentes que permiten compartir datos entre
+diferentes aplicaciones Android.\\
+Los componentes Broadcast Receivers reciben mensajes enviados por el sistema o
+por otras aplicaciones.
+
+Los componentes que integran una aplicación son especificados en el archivo
+manifiesto de la aplicación Manifest.xml\cite{App-Manifest}, donde
+adicionalmente se declaran: tanto los permisos requeridos por la aplicación para
+acceder a partes protegidas de la API\cite{Android-Permissions} e interactuar
+con otras aplicaciones; como los permisos requeridos por aplicaciones
+externas para interactuar con los componentes de la aplicación.
+
+La comunicación entre varias aplicaciones Android(Comunicación interApp), tiene
+lugar a través de intents\cite{App-Intent}, métodos proveídos por la API Android
+para la activación de componentes tanto al interior de la aplicación como entre
+aplicaciones externas. 
+
 \subsection{Técnicas de análisis de código}
 \subsubsection{Análisis estático y dinámico}
 Las soluciones propuestas para detectar fuga de información en aplicaciones
@@ -62,8 +103,8 @@ El compilador realiza el chequeo de tipos, partiendo del conjunto de labels de
 seguridad. Así, si el programa pasa el chequeo de tipos y compila correctamente,
 se espera que cumpla con las políticas de control de flujo evaluadas.
 
-\subsection{Background}
-\subsubsection{Sistema de anotaciones en Jif}
+\subsection{JIF(Java Information Flow)}
+% \subsubsection{Sistema de anotaciones en Jif}
 Jif es un lenguaje tipado de seguridad que extiende al lenguaje Java con labels
 de seguridad, a través de los cuales se especifican restricciones de cómo
 debería ser utilizada la información. Jif está compuesto por un compilador y un
@@ -82,8 +123,9 @@ generados cumplen con las restricciones establecidas.
 
 \subsubsection{DML(Decentralized Label Model)}
 Jif basa su sistema de anotaciones en el modelo de etiquetas DLM, donde se
-manejan tres elementos fundamentales: Principals, Políticas y Labels.\newline
-Principals: un principal es una entidad con autoridad para observar y cambiar
+manejan tres elementos fundamentales: Principales, Políticas y
+Etiquetas.\newline 
+Principales: un principal es una entidad con autoridad para observar y cambiar
 aspectos del sistema. Un programa pertenece a un principal, quien determina el
 comportamiento que este debería tener. Jif cuenta con una serie de principals ya
 definidos, por ejemplo, Alice, Bob, Chunck, etc, que pueden ser
@@ -93,19 +135,73 @@ principal que la define, determina qué otros principals pueden leer o
 influenciar la información. Así, una política puede ser de confidencialidad o de
 integridad, y se especifican de la forma: \{owner: reader list\} u
 \{owner: writer list\}.\newline 
-Labels: un label consiste en un conjunto de políticas de confidencialidad e
-integridad. Los labels se escriben en las expresiones del programa que se
-anota(labels de seguridad), esto es métodos, variables, arrays, etc.\newline 
-En síntesis, las políticas de seguridad definen que principals pueden leer o
-modificar la información, y esas políticas se expresan mediante labels.
+Etiquetas: una etiqueta consiste en un conjunto de políticas de confidencialidad
+e integridad. Las etiquetas se escriben en las expresiones del programa que se
+anota(etiquetas de seguridad), esto es métodos, variables, arrays, etc.\newline 
+En síntesis, las políticas de seguridad definen que Principales pueden leer o
+modificar la información, y esas políticas se expresan mediante etiquetas.
 
-\subsubsection{Label Checking}
+\subsubsection{Chequeo de etiquetas}
 Para hacer seguimiento al flujo de información de un programa, el compilador de
-Jif asocia un label al program counter de cada punto del programa,
-progam-counter label(\underline{pc}). En cada punto del programa, el
+Jif asocia una etiqueta al program counter de cada punto del programa,
+etiqueta del progam-counter(\underline{pc}). En cada punto del programa, el
 (\underline{pc}) representa la información que podría conocerse tras la
 ejecución de ese punto del programa.
-El (\underline{pc}) es afectado por los labels con que se define cada sentencia
-y expresión del programa, por tanto este es considerado como el límite
-superior(máxima información que podría conocerse) de los labels que han afectado
-el flujo de información para llegar a un determinado punto de ejecución.\newline
+El (\underline{pc}) es afectado por las etiquetas con que se define cada
+sentencia y expresión del programa, por tanto este es considerado como el límite
+superior(máxima información que podría conocerse) de las etiquetas que han
+afectado el flujo de información para llegar a un determinado punto de ejecución.
+
+\subsubsection{Anotación de variables y métodos en Jif}
+\label{sssec:sintaxis}
+dado que la sintaxis de anotación de Jif se basa en etiquetas de seguridad para
+extender la sintaxis del lenguaje java, a continuación se ilustra la forma en
+que normalmente se declaran variables y métodos en Java, y la forma en que se
+realiza la respectiva extención con la sintaxis de Jif.\newline
+\textbf{Definición de variables}\newline
+% -Definición de variables: \newline 
+En Java la sintaxis para definir una variable es:
+\begin{lstlisting}[basicstyle=\scriptsize]
+	modifier java-type varName
+\end{lstlisting}
+Extendiendo la sintaxis Java, en Jif las variables se definen de la forma:
+\begin{lstlisting}[basicstyle=\scriptsize]
+	modifier java-type {L} varName
+\end{lstlisting}
+Donde java-type especifica el tipo de dato Java que almacena la variable, \{L\}
+la etiqueta de seguridad  para especificar quien es el principal dueño de la
+variable, y varName, el respectivo nombre de la variable.\newline
+\textbf{Definición de métodos}\newline
+en Java la definición de un método tiene la siguiente sintaxis:
+\begin{lstlisting}[basicstyle=\scriptsize]
+modifier java-type methodName(java-type arg1,,, 
+java-type argn){body method}
+\end{lstlisting}
+En Jif  es posible asociar una etiqueta de seguridad al tipo de dato retornado,
+los argumentos que recibe y las excepciones declaradas. 
+Adicionalmente, se declara un begin-label(BL) y un end-label(EL).\newline
+Cuando en la definición del método no se específica una etiqueta de seguridad,
+el compilador de Jif asume unas por defecto. 
+La sintaxis es la siguiente:
+\begin{lstlisting}[basicstyle=\scriptsize]
+modifier java-type{RTL} methodName{BL}(java-type arg1{AL},,,
+				java-type argn{AL}) :{EL}
+\end{lstlisting}
+Donde: \emph{java-type}, es el tipo de dato Java retornado por el
+método.\newline 
+\emph{RTL}, Return Type Label, indica la etiqueta de seguridad para el valor
+retornado por el método.\newline 
+\emph{BL}, Begin Label, representa el máximo nivel se seguridad del
+\underline{pc} desde donde se invoca el método, de este modo,
+la etiqueta del program counter desde donde se invoca el método debe ser
+menor o igual de restrictivo que el BL con que se define el método. El BL
+también asegura que el método sólo podrá actualizar partes del programa que
+tengan igual BL. Con tales restricciones se evita la generación de flujos
+implícitos, vía invocación del método.\newline
+\emph{AL}, Argument Label, indica el máximo nivel de seguridad para los
+argumentos con que se llama el método, así, las etiquetas de los argumentos con
+que se invoca el método deben ser menor o igual de restrictivos que el AL con que ha
+definido el método.\newline 
+\emph{EL}, End Label, indica el \underline{pc} en el punto de terminación del
+método, y representa el máximo nivel de información que puede conocerse tras la
+finalización del método.
