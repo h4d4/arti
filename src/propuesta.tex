@@ -254,9 +254,15 @@ verificar la política de seguridad.\newline
 La anotación del aplicativo se fundamenta en identificar la declaración de
 sources, y en verificar qué métodos influencian esa información, de modo que,
 cuando la información sea enviada a través de sinks, tenga el nivel de seguridad
-adecuado. La anotación se condensa en una serie de pasos en las que se adicionan
-los labels de seguridad definidos en los elementos básicos de anotación
-\label{subsec:elements}.
+adecuado. Así, las políticas de anotación definidas en \ref{subsec:elements} son
+aplicadas a variables y métodos, de acuerdo a si contienen o no información del
+conjunto de sources: el tipo de dato EditText\footnote{Este tipo de
+dato es considerado como source si y sólo si, el campo UI al que referencia
+corresponde a un campo tipo textPassword, es decir, un campo que almacena
+contraseñas.} y los métodos: getDeviceId, getSimSerialNumber, findViewById,
+getLatitude, getLongitude y getSubscriberId.
+Finalmente, los pasos de anotación para el aplicativo son condensados en el
+generador de anotaciones.
 
 
 

@@ -1,1 +1,182 @@
 \section{evaluación}
+\subsection{Conjunto de evaluación y metricas}
+Para la evaluación se parte de DroidBench versión
+1.0\cite{DroidBenchBenchmarks}, DroidBench es un benchmark creado
+específicamente para evaluar propiedades de seguridad en aplicaciones Android. 
+De este benchmark se toma un grupo de testcases que permiten evaluar la política
+de seguridad establecida \ref{subsection:politica}, tal grupo está integrado por
+20 testcases, de los cuales, 14 presentan fugas de información. En la
+tabla \ref{tb:conjunto} se listan los casos de prueba, cada caso de prueba es
+itentificado mediante un número de item.
+
+\begin{table}[t]
+\begin{center}
+\small
+% \small\addtolength{\tabcolsep}{-3pt}
+\resizebox{6cm}{!}{
+\begin{tabular}{|p{0,5cm}|p{5,2cm}|}
+ 	\hline
+ 	\multicolumn{2}{|c|}{Conjunto de Evaluación} \\
+	\hline
+	\textbf{Item} & \textbf{Testcase}\\
+	\hline
+	1 & AndroidSpecific\_DirectLeak1\\
+	\hline
+	2 & AndroidSpecific\_InactiveActivity\\
+	\hline
+	3 & AndroidSpecific\_LogNoLeak\\
+	\hline
+	4 & AndroidSpecific\_Obfuscation1\\
+	\hline
+	5 & AndroidSpecific\_PrivateDataLeak2\\
+	\hline
+	6 & ArraysAndLists\_ArrayAccess1\\
+	\hline
+	7 & ArraysAndLists\_ArrayAccess2\\
+	 \hline
+	8 & GeneralJava\_Exceptions1\\
+	\hline
+	9 &  GeneralJava\_Exceptions2\\
+	\hline
+	10 & GeneralJava\_Exceptions3\\
+	\hline
+	11 & GeneralJava\_Exceptions4\\
+	\hline
+	12 & GeneralJava\_Loop1\\
+	\hline
+	13 & GeneralJava\_Loop2\\
+	\hline
+	14 & GeneralJava\_UnreachableCode\\
+	\hline
+	15 & ImplicitFlows\_ImplicitFlow1\\
+	\hline
+	16 & ImplicitFlows\_ImplicitFlow2\\
+	\hline
+	17 & ImplicitFlows\_ImplicitFlow4\\
+	\hline
+	18 & Lifecycle\_ActivityLifecycle3\\
+	\hline
+	19 & Lifecycle\_BroadcastReceiverLifecycle1\\
+	\hline
+	20 & Lifecycle\_ServiceLifecycle1\\
+	\hline
+\end{tabular}
+}
+\end{center}
+\caption{Conjunto de evaluación.\newline
+Donde \textit{Item} identifica el testcase y \textit{Testcase} especifica el
+nombre de la aplicación para el caso de prueba}
+\label{tb:conjunto}
+\end{table}
+Este conjunto de prueba es analizado con FlowDroid, JoDroid y con el
+Prototipo(que representa la herramienta de solución propuesta). Los
+calificativos para los resultados del análisis son:  
+True Positive(TP): cuando se reporta un leak que efectivamente existe. 
+False Positive(FP): cuando se reporta un leak que no existe.  
+True Negative(TN): cuando no se reporta leak y efectivamente no existe. 
+False Negative(FN): cuando no se reporta un leak existente.\newline
+Adicionalmente, con el comando \textit{time}\cite{time-man} de unix, se mide el
+tiempo(desempeño) que tarda cada herramienta en ejecutar el análisis.\newline
+En base a los resultados de análisis que reporta cada herramienta, se
+calcula su respectiva Precisión y Recall.\newline
+La \textbf{Precisión} hace referencia a los Casos Positivos esperados(correctos
+e incorrectos: TP, FP), en contraste con la proporción de verdaderos Positivos(TP)
+detectados\cite{Precision-Recall}. Una alta Precisión indica que la herramienta
+reporta más correctos Positivos(TP) que incorrectos Positivos(FP).\newline 
+El \textbf{Recall} indica la proporción de Casos Positivos detectados(TP),
+frente a los Casos Positivos esperados como correctos\cite{Precision-Recall}. Un
+alto Recall indica que la herramienta reporta más correctos Positivos(TP) que incorrectos
+Negativos(FN). Es decir, la herramienta deja pasar menos errores.\newline
+Las fórmulas para calcular Precisión(p) y Recall(r), son:
+\begin{equation}
+\label{pre}
+	p = TP/(TP +FP) 
+\end{equation}
+\begin{equation}
+\label{rec}
+	r = TP/(TP+FN)
+\end{equation}
+
+\subsection{Resultados de evaluación: FlowDroid, JoDroid y Prototipo}
+La tabla \ref{tb:resultados} ilustra los resultados obtenidos al analizar el
+conjunto de pruebas con cada una de las herramientas. Con el campo item se
+identifican los respectivos casos de prueba, los cuales están
+previamente definidos en la tabla \ref{tb:conjunto}.
+
+\begin{table}[t!]
+\begin{center}
+\small
+% \small\addtolength{\tabcolsep}{-3pt}
+\resizebox{8,5cm}{!}{
+\begin{tabular}{|p{0,5cm}|p{0,7cm}|p{0,5cm}|p{0,5cm}|p{0,5cm}|p{1cm}|p{1,6cm}|p{1cm}|}
+	\hline
+ 	\multicolumn{8}{|c|}{Resultados de evaluación} \\
+	\hline
+	\textbf{Item} & \textbf{Leaks} & \textbf{F} &
+	\textbf{J} & \textbf{P}&\textbf{ tF} & \textbf{ tJ} &\textbf{tP}\\
+	\hline
+	1 & 1 & TP & TP & TP &5.371s &
+	22m11.991s &2.063s\\
+	\hline
+	2 & 0 & TN & FP & FP  &3.255s &
+	22m25.617s &2.469s\\
+	\hline
+	3 & 0 & TN & TN & TN &5.505s & 21m6.548s &2.946s\\
+	\hline
+	4 & 1 & TP & TP & TP &6.734s &
+	22m46.541 &2.706s\\
+	\hline
+	5 & 1 & TP & TP & TP & 6.144s &
+	21m32.447s &2.644s\\
+	\hline
+	6 &  0 & FP & FP & FP & 4.708s & 22m01.926s &
+	1.278s\\
+	\hline
+	7 &  0 & FP & FP & FP & 4.4s &
+	22m11.023s &1.361s\\
+	 \hline
+	8 &  1 & TP & FN & TP &6.397s & 22m52.134s &2.755s\\
+	\hline
+	9 & 1 & TP & FN & TP &5.887s & 21m4.434s &1.980s\\
+	\hline
+	10 & 0 & FP & TN & FP &6.008s & 21m37.040s &2.032s\\
+	\hline
+	11 & 1 & TP & FN & TP &5.731s & 21m10.240s &2.313s\\
+	\hline
+	12 & 1 & TP & TP & TP &5.605s & 21m15.30s &2.800s\\
+	\hline
+	13 & 1 & TP & TP & TP &4.719s & 21m41.224s &1.361s\\
+	\hline
+	14 & 0 & TN & TN & FP &3.792s &
+	22m84.138s &1.197s\\
+	\hline
+	15 & 1 & FN & TP & TP &4.853s &
+	22m55.645s&1.331s\\
+	\hline
+	16 &  1 & FN & TP & TP &4.496s &
+	22m32.231s&1.212s\\
+	\hline
+	17 & 1 & FN & TP & TP &4.375s &
+	22m43.110s &1.224s\\
+	\hline
+	18 &   1 & TP & TP & TP &4.792s &
+	22m54.651s &1.222s\\
+	\hline
+	19 &   1 & TP & TP & TP &4.456s &
+	22m42.347s &1.061s\\
+	\hline
+	20 &  1 & TP & TP & TP &5.225s &
+	22m92.722s&1.180s\\
+	\hline
+\end{tabular}
+}
+\end{center}
+\caption{Resultados de evaluación para FlowDroid, JoDroid y Prototipo. Donde
+\textit{Item} indica el testcase que se evalúa; \textit{Leaks} indica si el
+testcase presenta fugas de información; \textit{F}, \textit{J} y  \textit{P}
+muestran los resultados devueltos por FlowDroid, JoDroid y por el Prototipo;
+\textit{tF}, \textit{tJ} y \textit{tP}, señalan el tiempo que toma el análisis
+para Flowdroid, JoDroid y para el Prototipo, respectivamente.}
+\label{tb:resultados}
+\end{table}
+Como dijdjdj
