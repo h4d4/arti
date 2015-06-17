@@ -1,2 +1,161 @@
 \section{Trabajos Relacionados}
-Dentro de las propuestas existentes están
+\label{sec:trabajo}
+\subsection{Clasificación de Sources y Sinks(SuSi)}
+\label{sec:susi}
+En el ámbito de análisis de seguridad de aplicaciones, independientemente del
+tipo de análisis, estático o dinámico, el punto de partida es la definición de
+políticas de seguridad, los pasos sucesivos para detectar la perdida de
+información giran en torno a tales políticas.\newline
+Muchas de las propuestas para análisis de flujo de información en aplicaciones
+Android, parten de un listado de sources y sinks para definir sus políticas de
+privacidad. Así, en el grupo de \textbf{sources} se incluyen las fuentes de
+datos sensibles, mientras que en el grupo de \textbf{sinks}, se incluyen los
+medios o canales que podrían filtrar información sensible de forma no autorizada. 
+En consecuencia, la efectividad del análisis se ve limitada al listado de
+sources y sinks, y la veracidad de los mismos. El inconveniente con estos sources y sinks, es que su
+clasificación suele hacerse de forma manual, por tanto, existe mayor
+probabilidad de error u omisión.\newline
+Con el fin de precisar dicha clasificación, el trabajo de investigación
+\textbf{SuSi} propone el uso de machine-learning para la clasificación y
+categorización de sources y sinks, partiendo del código fuente de la API Android.
+La propuesta de análisis se materializa en una herramienta que: partiendo del
+código fuente de una determinada versión de la API de Android, retorna un
+listado con la respectiva categorización de sources y sinks.\newline
+El proceso de análisis se compone de dos rondas secuenciales: clasificación y
+categorización.\newline
+Así, la salida de la primera ronda: calsificación de sources y sinks, se
+convierte en entrada para la ronda de categorización, donde se definen
+diferentes tipos de categorías, 12 para sources y 15 para sinks.
+\subsection{JOANA}
+\label{JOANA-Tool}
+JOANA (Java Object-sensitive ANAlysis)- Information Flow Control Framework for
+Java\cite{JOANA}. Verifica si una aplicación java contiene fugas de
+información, mediante análisis estático de flujos de información. El análisis parte  de anotaciones en
+el código fuente de la aplicación. JOANA utiliza técnicas de análisis de flujo de
+datos y técnicas de análisis de control de flujo. El frontend de la herramienta
+está basado en el framework de análisis de programas WALA\cite{wala}, a partir
+del cual obtiene la representación intermedia del código Java en forma SSA(Static
+Single Assignement), lo que permite obtener información dinámica del programa.
+Por otro lado, utiliza Grafos de Dependencia, System Dependence Graphs(SDG),
+para detectar dependencias entre las sentencias del programa, es decir,
+si existen caminos entre sentencias etiquetadas con nivel de seguridad
+alto y sentencias con nivel de seguridad bajo. Para esta etapa del análisis
+recurre a técnicas de slicing y chopping, reduciendo la cantidad de caminos
+posibles sólo a los válidos. Así obtiene como resultado, una mayor precisión y
+reducción de falsas alarmas en el análisis.
+
+Aunque JOANA provee sencillez a la hora de anotar el código a analizar, pues
+sólo es necesario anotar inputs y outputs del programa, porque la herramienta se
+encarga de propagar las anotaciones en el resto del programa; carece de
+características adicionales ofrecidas por sistemas de tipado de seguridad, por
+ejemplo, el mecanismo downgrading facilitado por JIF.
+
+Si bien, al igual que JOANA, la herramienta propuesta a través del presente
+trabajo, aplica análisis de control de flujo de información, esta última busca
+analizar aplicaciones implementadas en código Android, aprovechando las ventajas
+del sistema de anotaciones de JIF. Proporcionando una herramienta de apoyo al
+desarrollador de aplicaciones Android, ya que por el momento, JOANA sólo analiza
+aplicaciones en JAVA.
+
+\subsection{JoDroid}
+\label{subsec:jod}
+JoDroid\cite{JoDroid-Paper} es una extensión a la herramienta de análisis JOANA
+para soportar análisis de aplicaciones Android.\newline 
+El análisis de JOANA está basado en Program Dependence Graphs(PDG) y técnicas
+slicing. Con PDGs obtiene una representación del programa que
+analiza, donde los nodos representan statements y expresiones; y las aristas
+modelan las dependencias sintácticas entre los statements y expresiones:
+dependencias de datos y dependencias de control, por tanto el grafo está en
+capacidad de modelar, tanto flujos explícitos como flujos implícitos.\newline
+Con técnicas slicing provee sensibilidad al contexto, puesto que el PDG se
+construye de manera tal que al hacer el backwards slice de un determinado nodo,
+se obtiene cada nodo que es alcanzable por caminos del grafo que conservan
+llamadas al contexto.\newline
+El PDG es generado mediante el Front-end de WALA, framework que analiza bytecode
+de Java. Así, los ajustes hechos a JOANA adaptan parte del Front-end de WALA
+para generar el PDG de aplicaciones Android.\newline
+JoDroid detecta tanto flujos explícitos como flujos implícitos.
+
+\subsection{FlowDroid}
+\label{FlowDroid-Tool}
+FlowDroid es una herramienta para análisis estático de flujo de datos en
+Aplicaciones Android. También permite el análisis de aplicaciones Java.\newline
+Esta herramienta utiliza un tipo especial de análisis de flujo de datos:
+análisis tainting, que hace seguimiento al flujo de datos entre un conjunto de
+sources y un conjunto de sinks. Define tales conjuntos a partir de
+SuSi[\ref{sec:susi}], un clasificador automático de sources y sinks para la Api
+de Android.\newline 
+FlowDroid provee un alto recall y precisión\cite{FlowDroid-Thesis} en el
+análisis. El recall, mediante un fiel modelamiento del ciclo de vida de una
+aplicación Android; la precisión, incluyendo elementos de análisis como:
+context-, flow-, field- y object-sensitive. Para proveer sensibilidad al flujo y
+al contexto, recurre a grafos de llamada; y con grafos que modelan todos los
+procedimientos del programa(inter-procedural control-flow graph), analiza el
+flujo de datos entre procedimientos, proporcionando field- y object-sensitive.\newline
+Los autores de esta propuesta, alcanzan precisión en la construcción del grafo
+de llamadas extendiendo Soot\cite{Soot}, un framework que genera código
+intermedio para código Java y código ejecutable Android(dex). Adicionalmente,
+con el framework Heros\cite{heros}, incluyen llamadas multihilos en el análisis
+de flujo de datos entre procedimientos.
+
+Entre las limitaciones de FlowDroid está el over-tainting y la no detección
+de flujos implícitos. Por tanto, la herramienta no distingue elementos marcados
+ni dentro de arrays, ni dentro de collections, si se inserta un elemento marcado
+dentro de alguna de estas estructuras, inmediatamente se marca el resto de
+elementos. La herramienta tampoco identifica flujos implícitos,    
+% causados por dependencias entre control de flujo.\newline
+puesto que, según los resultados de evaluación de
+DroidBench\cite{DroidBenchBenchmarks}, su benchmark; cuando Flowdroid analiza el
+conjunto de aplicaciones de prueba para la identificación de flujos implícitos, no
+detecta fuga de datos, generando falsos negativos en la detección de flujos
+implícitos\cite[pags 32-36]{FlowDroid-Thesis}.
+
+Aún cuando el problema a atacar es el mismo: fuga de información, la propuesta
+que se expone a través del presente trabajo difiere en el enfoque de análisis de
+FlowDroid, mientras FlowDroid se concentra en detectar si la aplicación de un
+tercero presenta fugas de información, la herramienta planteada aborda el
+análisis del lado del desarrollador de la aplicación, apoyándolo en
+la verificación del cumplimiento de políticas de seguridad. Así, resulta más
+conveniente guiar el análisis mediante control de flujo de información, ya que
+se previene fuga por datos no marcados para el análisis(under-tainting) y por
+la no detección de flujos implícitos, siendo posible garantizar el cumplimiento
+de políticas de seguridad.
+ 
+\subsection{TaintDroid, Dinamic Taint Tracking, para la detección de fugas de
+Información}
+\label{TaintDroid-Tool}
+A diferencia de las propuestas expuestas anteriormente, caracterizadas
+por ejecutar el análisis de manera estática, TaintDroid es una herramienta de
+análisis dinámico. Está herramienta extiende la plataforma de dispositivos
+celulares Android, con el fin de verificar el uso dado por aplicaciones de
+terceros a datos sensibles del usuario. El análisis aplica técnicas de análisis
+tainting, marcando automáticamente como sources, datos provenientes de fuentes
+consideradas privadas y/o sensibles; y como sinks, canales para la salida de
+datos de la aplicación, como por ejemplo internet.
+Cada vez que un dato marcado como source sale de la aplicación, se genera un log.\newline 
+Para reducir sobrecarga en el dispositivo, pues el análisis es ejecutado a nivel
+de instrucciones, instrumentan la máquina virtual de Android con marcas de
+propagación a nivel de: variables, métodos, mensajes y archivos. Las marcas de
+variable hacen seguimiento a datos dentro de aplicaciones consideras no
+confiables. Las marcas de mensaje siguen mensajes entre aplicaciones. Debido a
+que TaintDroid no hace seguimiento a la ejecución de código nativo, utiliza las
+marcas de métodos para hacer seguimiento a lo retornado luego de invocar métodos
+de librerías nativas. Las marcas de archivo son utilizadas para verificar la
+persistencia de los datos, acorde a las políticas de seguridad.\newline
+Otra medida para reducir sobrecarga en la ejecución del análisis, consiste en
+omitir flujos de control, generando no detección de flujos
+implícitos\cite[pag 12]{TaintDroid}.\newline Si bien, TaintDroid supera el inconveniente de sobrecarga en la ejecución del
+análisis, un inconveniente característico en análisis dinámico, está limitado
+para detectar fuga de datos mediante flujos implícitos, puesto que se
+enfoca en hacer seguimiento a flujos de datos directos(flujos
+explícitos).
+
+Al ser una herramienta de análisis dinámico, TaintDroid sólo detecta fugas de
+información correspondiente a las ejecuciones presentadas por el programa, y
+para la finalidad de su análisis: informar al usuario de posibles fugas de
+información, se puede decir que es adecuado. No obstante, para los propósitos de
+la propuesta planteada a través del presente trabajo, con la que se pretende
+brindar una herramienta de análisis para que el desarrollador verifique el
+cumplimiento de políticas de seguridad en la aplicación que implementa, no
+resulta viable aplicar análisis dinámico, ni técnicas de análisis tainting para
+hacer seguimiento a flujos de datos.

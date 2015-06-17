@@ -215,8 +215,6 @@ natural, contrario a lo que sucede en las técnicas de análisis de flujos de
 datos, en estas, si la construcción del análisis no define casos de propagación
 para el marcado de datos mediante flujos implícitos, el análisis carece de
 criterios para la detección de fugas a través de los mismos.\newline
-% Tal resultado refleja lo ilustrado por la teoría \cite{taghdiri-etal-2010} y
-% \cite{hammer09ijis}.\newline
 \begin{table}[t]
 \begin{center}
 \small
@@ -267,9 +265,9 @@ flujos implícitos.}
 La tabla \ref{tb:res} resume las ventajas y desventajas entre el
 Prototipo y las herramientas de comparación, FlowDroid y JoDroid. En esta se
 indica si la herramienta presenta mayor(+) o menor(-): precisión, recall y costo
-en desempeño. Si la herramienta permite(\checkmark) o no permite(X): detección
-de fugas de información a través de flujos implícitos, detección automática para
-sources y sinks, y soporte para análisis entre varias aplicaciones.\newline
+en desempeño. Si la herramienta permite(\checkmark) o no permite(X): detectar
+fugas de información a través de flujos implícitos, detectar automátimente
+sources y sinks, y anallizar varias aplicaciones(Análisis InterApp).\newline
 \begin{table}[t]
 \begin{center}
 \small
