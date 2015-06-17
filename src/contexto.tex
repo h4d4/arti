@@ -139,7 +139,8 @@ Etiquetas: una etiqueta consiste en un conjunto de políticas de confidencialida
 e integridad. Las etiquetas se escriben en las expresiones del programa que se
 anota(etiquetas de seguridad), esto es métodos, variables, arrays, etc.\newline 
 En síntesis, las políticas de seguridad definen que Principales pueden leer o
-modificar la información, y esas políticas se expresan mediante etiquetas.
+modificar la información, y esas políticas se expresan mediante
+etiquetas.
 
 \subsubsection{Chequeo de etiquetas}
 Para hacer seguimiento al flujo de información de un programa, el compilador de
@@ -150,7 +151,8 @@ ejecución de ese punto del programa.
 El (\underline{pc}) es afectado por las etiquetas con que se define cada
 sentencia y expresión del programa, por tanto este es considerado como el límite
 superior(máxima información que podría conocerse) de las etiquetas que han
-afectado el flujo de información para llegar a un determinado punto de ejecución.
+afectado el flujo de información para llegar a un determinado punto de
+ejecución.
 
 \subsubsection{Anotación de variables y métodos en Jif}
 \label{sssec:sintaxis}
@@ -228,4 +230,27 @@ End Label(EL): Jif hace un Join de los labels con que se definen las
 excepciones del método, si el método no tiene excepciones, el label por defecto
 es el menos restrictivo \{ \}\newline
 Return Type Label(RTL): Jif hace un Join de los AL y el EL.\newline
-Labels para excepciones: el valor del EL.\newline
+Labels para excepciones: el valor del EL.
+
+\subsubsection{Flujos implícitos y \underline{pc}}
+Los flujos implícitos son canales creados durante el control de flujo del
+programa. Buscando prevenir la fuga de información a través de estos canales,
+Jif asocia un \underline{pc} a cada statement y expresión del programa,
+representando la información que debería conocerse tras su evaluación.\\
+El sistema de tipos de Jif asegura que el \underline{pc} debe ser por
+lo menos tan restrictivo como los labels de las variables de que depende el
+program counter de la sentencia.\newline
+En el siguiente ejemplo se ilustra la generación de flujos implícitos:
+\begin{lstlisting}[basicstyle=\scriptsize]
+boolean {Alice:} secreto;
+boolean {} publico;
+secreto = true;
+if( secreto )		
+	publico = 0;
+else				//Implicit Flow
+	publico = 1;
+\end{lstlisting}
+El flujo implícito tiene lugar en el condicional porque la variable
+\emph{publico}, cuyo nivel de seguridad es bajo (\underline{pc}=\{\}) permite
+conocer información de la variable \emph{secreto}, con nivel de seguridad alto
+(\underline{pc}=\{Alice:\})\newline
