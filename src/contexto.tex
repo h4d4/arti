@@ -205,3 +205,27 @@ definido el método.\newline
 \emph{EL}, End Label, indica el \underline{pc} en el punto de terminación del
 método, y representa el máximo nivel de información que puede conocerse tras la
 finalización del método.
+
+\subsubsection{Labels de anotación que Jif asume por defecto}
+\label{sssec:default-labels}
+Cuando en la declaración de variables o métodos no se especifica su respectivo
+label de seguridad, Jif lo infiere o genera automáticamente. De acuerdo al tipo
+de sentencia. Así:\newline
+- Variables locales: Jif infiere sus labels, de modo que se respeten las
+restricciones sobre el flujo de información.\newline
+- Arrays: por defecto, Jif define el label público para el Base Label(BL) y el
+Size Label(SL) de un array.\newline
+- Class fields: el label por defecto es \{ \}, que representa información con el
+menor nivel de confidencialidad. Es el label menos confiable, con este se
+asegura que información altamente confidencial no podrá ser almacenado en el
+campo de la clase.\newline
+- Métodos: los labels que Jif genera por defecto para la definición de
+métodos son:\newline 
+Argument Label(AL): el label por defecto es el Top principal, es decir que sólo
+la máxima autoridad podrá leer la información del argumento.\newline 
+Begin Label(BL): su label por defecto es el Top principal.\newline
+End Label(EL): Jif hace un Join de los labels con que se definen las
+excepciones del método, si el método no tiene excepciones, el label por defecto
+es el menos restrictivo \{ \}\newline
+Return Type Label(RTL): Jif hace un Join de los AL y el EL.\newline
+Labels para excepciones: el valor del EL.\newline

@@ -7,7 +7,7 @@ De este benchmark se toma un grupo de testcases que permiten evaluar la polític
 de seguridad establecida \ref{subsection:politica}, tal grupo está integrado por
 20 testcases, de los cuales, 14 presentan fugas de información. En la
 tabla \ref{tb:conjunto} se listan los casos de prueba, cada caso de prueba es
-itentificado mediante un número de item.
+identificado con el número que se indica en el campo item.
 
 \begin{table}[t]
 \begin{center}
@@ -68,9 +68,11 @@ Donde \textit{Item} identifica el testcase y \textit{Testcase} especifica el
 nombre de la aplicación para el caso de prueba}
 \label{tb:conjunto}
 \end{table}
-Este conjunto de prueba es analizado con FlowDroid, JoDroid y con el
-Prototipo(que representa la herramienta de solución propuesta). Los
-calificativos para los resultados del análisis son:  
+Este conjunto de prueba es analizado con FlowDroid, JoDroid y con el Prototipo. 
+El Prototipo representa la herramienta de análisis propuesta, por tanto, con el
+Prototipo se genera la versión anotada del aplicativo y se evalua la política
+anotada.\newline
+Los calificativos para los resultados del análisis son:  
 True Positive(TP): cuando se reporta un leak que efectivamente existe. 
 False Positive(FP): cuando se reporta un leak que no existe.  
 True Negative(TN): cuando no se reporta leak y efectivamente no existe. 
