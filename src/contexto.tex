@@ -2,9 +2,9 @@
 \label{sec:context}
 En esta sección se presentan conceptos y herramientas necesarias para
 contextualizar el tema de investigación: Análisis de flujo de información en
-apliaciones Android.
+aplicaciones Android.
 Así, la sección inicia describiendo en qué consisten las aplicaciones Android. Luego presenta
-las técnicas de análisis de código con que suelen analizarce estas aplicaciones.
+las técnicas de análisis de código con que suelen analizarse estas aplicaciones.
 Después, expone los conceptos de sources y sinks. Finalmente, describe un
 lenguaje tipado de seguridad para análisis de flujo de información en
 aplicativos Java(Jif).
@@ -16,8 +16,8 @@ El framework de Aplicación Android ofrece diferentes funcionalidades de
 operación del sistema, proporcionando información de los servicios ofrecidos por
 el teléfono. Por ejemplo, provee información de la ubicación del
 usuario.\newline 
-Así pues, una aplicación Android obtiene del framework, clases e interfaces
-necesarias para implementar sus funcionalidades.
+En consecuencia, una aplicación Android obtiene del framework, clases e
+interfaces necesarias para implementar sus funcionalidades.
 
 Por otro lado, el SDK, Android Software Development Toolkit, permite compilar
 la aplicación a una versión ejecutable por dispositivos Android, esto es, código
@@ -28,7 +28,8 @@ instala en el dispositivo para obtener las funcionalidades de la aplicación.
 
 En lo que respecta a su estructura, 
 una aplicación Android puede integrarse por uno o más de los siguientes
-componentes: Activities, Services, Content Providers y Broadcast Receivers.\\
+componentes: Actividades, Servicios, Proveedores de contenido y Broadcast
+Receivers.\\
 Las actividades representan acciones a ejecutar por el usuario, permiten que el
 usuario se comunique con la aplicación.\\
 Los servicios son componentes de aplicación que ejecutan tareas en background.\\
@@ -51,7 +52,7 @@ aplicaciones externas.
 
 \subsection{Técnicas de análisis de código}
 \subsubsection{Análisis estático y dinámico}
-Las soluciones propuestas para detectar fuga de información en aplicaciones
+las soluciones propuestas para detectar fuga de información en aplicaciones
 Android, se enmarcan en el análisis estático o dinámico de la aplicación, en
 algunos casos, se combinan ambos tipos.\newline 
 En \textbf{análisis estático}\cite{Static-dynamic}, se estudia el código del
@@ -69,7 +70,7 @@ no es necesario construir un modelo aproximado de todos los posibles caminos de
 ejecución.
 
 \subsubsection{Técnicas utilizadas en análisis estático} 
-Generalmente, para verificar el cumplimiento de políticas de seguridad mediante
+generalmente, para verificar el cumplimiento de políticas de seguridad mediante
 análisis estático, se aplican técnicas de seguridad de tipado
 (Typed-Inference/Security-Typed Analysis) y técnicas de flujo de
 datos(Data/Control Flow Analysis)\cite{Information-Flow-Java}.\newline 
@@ -83,9 +84,9 @@ grafos de Control de Flujo CFG(Control Flow Graph), Grafos de Flujo de Datos
 DFG( Data Flow Graph) y Grafos de llamadas CG (Call Graphs).
 
 \subsubsection{Security Typed Languages}
-Las herramientas basadas en técnicas de análisis Security-Typed, involucran
+las herramientas basadas en técnicas de análisis Security-Typed, involucran
 conceptos como flujo de información, políticas de confidencialidad e integridad,
-y chequeo de tipos.
+y chequeo de tipos.\newline
 \emph{Flujo de información}: el flujo de información describe el
 comportamiento de un programa, desde la entrada de los datos hasta la salida de
 los mismos.\newline 
@@ -134,7 +135,7 @@ código fuente de una determinada versión de la API de Android, retorna un
 listado con la respectiva categorización de sources y sinks.\newline
 El proceso de análisis se compone de dos rondas secuenciales: clasificación y
 categorización.\newline
-Así, la salida de la primera ronda: calsificación de sources y sinks, se
+Así, la salida de la primera ronda: clasificación de sources y sinks, se
 convierte en entrada para la ronda de categorización, donde se definen
 diferentes tipos de categorías, 12 para sources y 15 para sinks.
 
@@ -178,7 +179,7 @@ modificar la información, y esas políticas se expresan mediante
 etiquetas.
 
 \subsubsection{Chequeo de etiquetas}
-Para hacer seguimiento al flujo de información de un programa, el compilador de
+para hacer seguimiento al flujo de información de un programa, el compilador de
 Jif asocia una etiqueta al program counter de cada punto del programa,
 etiqueta del progam-counter(\underline{pc}). En cada punto del programa, el
 (\underline{pc}) representa la información que podría conocerse tras la
@@ -194,7 +195,7 @@ ejecución.
 dado que la sintaxis de anotación de Jif se basa en etiquetas de seguridad para
 extender la sintaxis del lenguaje java, a continuación se ilustra la forma en
 que normalmente se declaran variables y métodos en Java, y la forma en que se
-realiza la respectiva extención con la sintaxis de Jif.\newline
+realiza la respectiva extensión con la sintaxis de Jif.\newline
 \textbf{Definición de variables}\newline
 % -Definición de variables: \newline 
 En Java la sintaxis para definir una variable es:
@@ -245,7 +246,7 @@ finalización del método.
 
 \subsubsection{Labels de anotación que Jif asume por defecto}
 \label{sssec:default-labels}
-Cuando en la declaración de variables o métodos no se especifica su respectivo
+cuando en la declaración de variables o métodos no se especifica su respectivo
 label de seguridad, Jif lo infiere o genera automáticamente. De acuerdo al tipo
 de sentencia. Así:\newline
 - Variables locales: Jif infiere sus labels, de modo que se respeten las
@@ -268,7 +269,7 @@ Return Type Label(RTL): Jif hace un Join de los AL y el EL.\newline
 Labels para excepciones: el valor del EL.
 
 \subsubsection{Flujos implícitos y \underline{pc}}
-Los flujos implícitos son canales creados durante el control de flujo del
+los flujos implícitos son canales creados durante el control de flujo del
 programa. Buscando prevenir la fuga de información a través de estos canales,
 Jif asocia un \underline{pc} a cada statement y expresión del programa,
 representando la información que debería conocerse tras su evaluación.\\

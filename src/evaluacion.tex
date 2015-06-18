@@ -2,16 +2,16 @@
 \label{sec:eval}
 Esta sección inicia presentando el conjunto de evaluación del que se parte para
 evaluar la herramienta de solución propuesta(Prototipo), más las métricas de
-seguridad a medir.
+seguridad a verificar.
 Después compara los resultados de analizar el conjunto de evaluación con
 el Prototipo, y otras dos herramientas: FlowDroid y JoDroid.
 
-\subsection{Conjunto de evaluación y metricas}
+\subsection{Conjunto de evaluación y métricas}
 Para la evaluación se parte de DroidBench versión
 1.0\cite{DroidBenchBenchmarks}, DroidBench es un benchmark creado
 específicamente para evaluar propiedades de seguridad en aplicaciones Android.
 De este benchmark se toma un grupo de testcases que permiten evaluar la política
-de seguridad establecida \ref{subsection:politica}, tal grupo está integrado por
+de seguridad establecida(\ref{sub:politica}), tal grupo está integrado por
 20 testcases, de los cuales, 14 presentan fugas de información. En la tabla
 \ref{tb:conjunto} se listan los casos de prueba.
 \begin{table}[t]
@@ -67,15 +67,15 @@ de seguridad establecida \ref{subsection:politica}, tal grupo está integrado po
 \end{tabular}
 }
 \end{center}
-\caption{Conjunto de evaluación.\newline
-Donde \textit{Item} identifica el testcase y \textit{Testcase} especifica el
-nombre de la aplicación para el caso de prueba}
+\caption{Conjunto de evaluación.
+Donde \textit{Test} identifica el caso de prueba y \textit{Testcase} especifica
+el nombre de la aplicación de caso de prueba.}
 \label{tb:conjunto}
 \end{table}
 % % \vspace{-0.5em}
 Este conjunto de prueba es analizado con FlowDroid, JoDroid y con el Prototipo. 
 El Prototipo representa la herramienta de análisis propuesta, por tanto, con el
-Prototipo se genera la versión anotada del aplicativo y se evalua la política
+Prototipo se genera la versión anotada del aplicativo y se evalúa la política
 anotada.\newline
 Los calificativos para los resultados del análisis son:  
 True Positive(TP): cuando se reporta un leak que efectivamente existe. 
@@ -106,7 +106,7 @@ Las fórmulas para calcular Precisión(p) y Recall(r), son:
 % \vspace{-0.5em}
 \subsection{Comparación de Desempeño: FlowDroid, JoDroid y Prototipo}
 En la tabla \ref{tb:resultados} se ilustran los resultados de analizar el
-conjunto de pruebas con FlowDroid, JoDroid y el Prototipo. El campo \emph{test}
+conjunto de pruebas con FlowDroid, JoDroid y el Prototipo. El campo \emph{Test}
 identifica los casos de prueba listados en la tabla \ref{tb:conjunto}.
 De acuerdo al tiempo que toma cada herramienta para analizar cada caso de
 prueba, tal como se registra en los campos tF, tJ y tP; el Prototipo presenta
@@ -188,12 +188,11 @@ grafos de dependencia, el análisis toma menos tiempo.
 }
 \end{center}
 \caption{Resultados de evaluación para FlowDroid, JoDroid y Prototipo. Donde
-\textit{test} indica el testcase que se evalúa; \textit{Leaks} especifica
+\textit{Test} indica el testcase que se evalúa; \textit{Leaks} especifica
 el numero de fugas de información que presenta el testcase; \textit{F},
-\textit{J} y \textit{P} muestran los resultados retornados por FlowDroid,
-JoDroid y por el Prototipo; \textit{tF}, \textit{tJ} y \textit{tP}, señalan el tiempo
-que toma el análisis para Flowdroid, JoDroid y para el Prototipo,
-respectivamente.}
+\textit{J} y \textit{P} muestran los resultados retornados por cada
+herramienta: FlowDroid, JoDroid y por el Prototipo; \textit{tF}, \textit{tJ} y
+\textit{tP}, señalan el tiempo que tarda el análisis con cada herramienta.}
 \label{tb:resultados}
 \end{table}
 
@@ -205,9 +204,9 @@ reportados por cada herramienta. Con estos valores se calcula la Precisión y el
 Recall, cuyos resultados son ilustrados en la tabla
 \ref{tb:comparacion}.\newline 
 Respecto a los resultados de la tabla \ref{tb:comparacion}, es posible decir: 
-\emph{Precisión:} el análisis pesimista en que se basa el Prototipo, donde se
-asume que todos los métodos implementados en la aplicación serán invocados, hace que los resultados
-del análisis sean menos precisos, generando más falsos positivos(FP).\newline 
+\emph{Precisión:} el análisis pesimista en que se basa el Prototipo, trae como
+resultado un análisis menos preciso, ya que, al tratar de incluir todas las
+posibles ramas de ejecución, se generan más falsos positivos.\newline 
 \emph{Recall:} Para la evaluación realizada, el análisis de flujo de información
 mediante el lenguaje tipado de seguridad Jif, ofrece mejor Recall, frente al análisis
 de flujo de datos en que se basa FlowDroid y el análisis de flujo de información
@@ -273,8 +272,8 @@ La tabla \ref{tb:res} resume las ventajas y desventajas entre el
 Prototipo y las herramientas de comparación, FlowDroid y JoDroid. En esta se
 indica si la herramienta presenta mayor(+) o menor(-): precisión, recall y costo
 en desempeño. Si la herramienta permite(\checkmark) o no permite(X): detectar
-fugas de información a través de flujos implícitos, detectar automátimente
-sources y sinks, y anallizar varias aplicaciones(Análisis InterApp).\newline
+fugas de información a través de flujos implícitos, detectar automatícenme
+sources y sinks, y analizar varias aplicaciones(Análisis InterApp).\newline
 \begin{table}[t]
 \begin{center}
 \small

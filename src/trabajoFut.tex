@@ -1,12 +1,12 @@
 \section{Discusión y Trabajo Futuro}
 \label{discusion}
 
-La presente sección incia con una discusión de las limitaciones y retos que
+La presente sección incoa con una discusión de las limitaciones y retos que
 implica la propuesta de solución. Después, plantea el trabajo futuro.
 
 \subsection{Discusión}
 \subsubsection{Límites de la solución propuesta}
-Las limitaciones del diseño de solución en que se enfoca el presente trabajo,
+las limitaciones del diseño de solución en que se enfoca el presente trabajo,
 corresponden a políticas de seguridad evaluables, tipos de aplicaciones
 evaluables y limitaciones propias del lenguaje Jif.
 
@@ -28,13 +28,13 @@ aplicaciones externas.
 
 \emph{Características del lenguaje Jif}\\
 El compilador de Jif no soporta algunas características del lenguaje Java
-estandar como: nested clases, initializer blocks, threads, etc; por tanto no es
+estándar como: nested clases, initializer blocks, threads, etc; por tanto no es
 posible analizar el flujo de información de aplicativos Android que requieran de
 tales características del lenguaje Java, a menos que se encuentre sintaxis
 equivalente para soportar tales características.\newline 
 
 \subsubsection{Retos para el análisis}
-El análisis de flujo de información en aplicativos Android mediante el sistema
+el análisis de flujo de información en aplicativos Android mediante el sistema
 de anotaciones de Jif, involucra una serie de retos como consecuencia de: las
 diferencias entre una aplicación Android y una aplicación Java convencional; y
 las limitaciones propias del lenguaje Jif.\newline 
@@ -86,7 +86,7 @@ está dentro de las limitaciones del lenguaje Jif.\newline
 - Sobreescritura de componentes: para la implementación de aplicativos en Android es necesaria la
 sobreescritura de componentes específicos de la API Android, componentes como
 (activities, content providers, receivers, services), y cómo para indicar la
-sobreescritura de los respectivos métodos de un componente se requiere el
+sobreescritura de los respectivos métodos de un componente se usa el
 Statement @Override cuya clase no es soportada por el sistema de anotaciones de
 Jif.
 

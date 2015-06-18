@@ -26,7 +26,7 @@ información en aplicativos Java convencionales, y una de las diferencias entre
 una aplicación Android y una aplicación Java convencional es la API de Android,
 puesto que, para adquirir sus funcionalidades una aplicación Android requiere de
 clases de la API. No obstante, el sistema de anotaciones de Jif está
-implementado para clases del lenguaje Java estandar y no para clases de la API
+implementado para clases del lenguaje Java estándar y no para clases de la API
 Android.\newline 
 En consecuencia, el diseño ideal para contribuir con la solución del problema es:
 una herramienta que contenga el setup de Jif para Android, e integre un clasificador de sources
@@ -46,11 +46,11 @@ seguridad específica.
 Por consiguiente, el diseño se centra en soportar un conjunto reducido de clases
 de la API de Android, y en incluir un conjunto específico de sources y
 sinks; de acuerdo a una política de seguridad establecida. Ese conjunto de
-sources y sinks, se toma del listado de sources y sinks proveído por SuSi
-\ref{sec:susi}.\newline
+sources y sinks, se toma del listado de sources y sinks proveído por
+SuSi(\ref{sec:susi}) .\newline
 Adicionalmente, para aspectos de evaluación, se incluye el diseño de un anotador
 que automatiza la anotación requerida por el desarrollador.
-De modo que, acorde a la política de seguridad establecida, se genere la
+De manera que, acorde a la política de seguridad establecida, se genere la
 versión anotada del aplicativo a analizar.\newline
 La figura \ref{fig:desingReal} muestra el esquema del diseño, allí los componentes
 principales son el \emph{generador de anotaciones} y la \emph{herramienta de
@@ -80,13 +80,8 @@ Android.
 \end{figure}
 
 Siguiendo el esquema de diseño anteriormente descrito: primero, se define la
-política de seguridad a evaluar \ref{subsection:politica}; segundo, se toman a
-consideración elementos influyentes para verificar el cumplimiento de la
-política mediante Jif \ref{subsec:consVerPol}; y tercero, teniendo en cuenta
-\ref{subsection:politica} y \ref{subsec:consVerPol}, se definen los lineamientos
-de anotación \ref{sec:lineamientos}. Tales lineamientos establecen el esquema
-para anotaciones a la API Android y anotaciones a los aplicativos a
-analizar(lineamientos del anotador).
+política de seguridad a evaluar \ref{sub:politica}; y segundo, se definen los
+lineamientos de anotación \ref{sub:lineamientos}.
 
 \subsection{Definición de la política de seguridad}
 \label{sub:politica}
@@ -106,9 +101,7 @@ destinados a almacenar contraseñas).\newline
 información considerada con nivel de seguridad bajo, comprende un conjunto
 de sinks. Los sinks son canales que permiten la salida de información del
 dispositivo, por ejemplo, los mensajes de texto. El conjunto de sinks
-está integrado por los métodos de la clases Log y SmsManager de la API.\newline
-Este conjunto de sources y sinks es tomado del listado proveído por el
-clasificador SuSi \ref{sec:susi}.
+está integrado por los métodos de la clases Log y SmsManager de la API.
 
 \subsection{Lineamientos de anotación}
 \label{sub:lineamientos}
@@ -167,7 +160,7 @@ Para esto se utilizan las etiquetas de seguridad que regulan el llamado a
 métodos en el sistema de anotaciones de Jif(sintaxis de anotación
 \ref{sssec:sintaxis}), estas son Begin Label(BL) y Argument Label(AL).
 Con las etiquetas para el BL se determinan los puntos del programa desde donde
-puede invocarse el método, de este modo, el método podrá ser invocado si: el
+puede ser invocado el método, de este modo, el método podrá ser invocado si: el
 nivel de seguridad del punto del programa desde donde se llama el método es
 menor o igual de restrictivo que el BL con que ha sido definido el método. Para
 el presente caso se busca que un método pueda ser invocado desde cualquier punto
@@ -177,15 +170,15 @@ seguridad de los argumentos con que se invoca el método. Por tanto, el nivel de
 seguridad de los argumentos con que se invoca un método, debe ser menor o igual
 de restrictivo que el nivel de seguridad con que han sido definidos los
 argumentos del método.\newline
-El nivel de restricción de la información se evalua de acuerdo a las
+El nivel de restricción de la información se evalúa de acuerdo a las
 etiquetas de seguridad con que de defina e invoque el método. De este modo,
 información con nivel de seguridad alto es más restrictiva que información con nivel de
 seguridad bajo.
-Aterrizando estos conceptos a los elementos definidos en la sección
-\ref{subsec:lineamientos}, información anotada con el label \emph{\{Alice:\}} es
+Aterrizando estos conceptos a los elementos definidos en 
+\ref{subsec:elements}, información anotada con el label \emph{\{Alice:\}} es
 más restrictiva que información anotada con el label \emph{\{\}}. Puesto que, el
 primer label denota que la información tiene nivel de seguridad alto, mientras
-que el segundo, indica que la información tiene nivel de segurodad bajo.\newline 
+que el segundo, indica que la información tiene nivel de seguridad bajo.\newline 
 Tomando como ejemplo el método sendTextMessage de la clase SmsManager, mediante
 el cual se envían mensajes de texto:
 \begin{lstlisting}[basicstyle=\scriptsize]
@@ -203,7 +196,7 @@ Con tal etiqueta se garantiza que la información se envía, si y sólo si, el
 nivel de seguridad del argumento con que se invoca el método es menor o igual de
 restrictivo que la etiqueta pública \{\}; como no se tiene una etiqueta de
 seguridad menos restrictiva que esta, se garantiza que la información sólo es
-envíada si efectivamente está anotada con tal etiqueta, es decir, si se trata
+enviada si efectivamente está anotada con tal etiqueta, es decir, si se trata
 de información pública.\newline 
 Por ejemplo,
 si el método se invoca con información anotada con label de seguridad alto, se
@@ -213,8 +206,8 @@ En el caso del BL al anotarlo con la etiqueta \{Alice:\}, se permite que el
 método sea invocado desde cualquier punto de un programa, es decir, desde
 puntos con nivel de seguridad bajo(\{\}) y desde puntos con nivel de seguridad
 alto(\{Alice:\}).
-Para el resto de labels se dejan los que Jif genera por defecto
-\ref{sssec:default-labels}.\newline
+Para el resto de labels se dejan los que Jif genera por
+defecto(\ref{sssec:default-labels}) .\newline
 % cualquier punto de un programa que sea igual o menor de restrictivo que el
 % principal Alice, esto se traduce en que podrá ser invocado desde cualquier punto
 % de un programa, lo cual es correcto porque lo que se busca el evitar que se
@@ -262,12 +255,12 @@ al mecanismo con que se integran al sistema de anotaciones de Jif.
 	\end{center}
 	\caption{Entradas y salidas para el generador de anotaciones.\newline
 	Para generar la versión anotada del aplicativo a analizar, el anotador parte
-	del código fuente del aplicativo, la política de seguridad definida en
-	\ref{subsection:politica} y el conjunto de sources y sinks implicados en la misma.}
+	del código fuente del aplicativo, la política de seguridad definida, más el
+	conjunto de sources y sinks requeridos para la misma.}
 	\label{fig:desingSolution}
 \end{figure}
 Si bien, el desarrollador debe implementar manualmente las anotaciones en el
-aplicativo a análizar, acorde a las políticas de seguridad que requiere
+aplicativo a analizar, acorde a las políticas de seguridad que requiere
 verificar; en el presente diseño de solución, se incluye un generador de
 anotaciones que automatiza la anotación requerida por el desarrollador. Como se
 ilustra en la figura \ref{fig:desingSolution}, el generador de anotaciones
@@ -279,11 +272,10 @@ sources, y en verificar qué métodos influencian esa información, de modo que,
 cuando la información sea enviada a través de sinks, tenga el nivel de seguridad
 adecuado. Así, las políticas de anotación definidas en \ref{subsec:elements} son
 aplicadas a variables y métodos, de acuerdo a si contienen o no información del
-conjunto de sources: el tipo de dato EditText\footnote{Este tipo de
-dato es considerado como source si y sólo si, el campo UI al que referencia
-corresponde a un campo tipo textPassword, es decir, un campo que almacena
-contraseñas.} y los métodos: getDeviceId, getSimSerialNumber, findViewById,
-getLatitude, getLongitude y getSubscriberId.\newline
+conjunto de sources, integrado por: el tipo de dato EditText(cuando el campo UI
+al que referencia corresponde a un campo que almacena contraseñas), y los
+métodos:
+getDeviceId, getSimSerialNumber, findViewById, getLatitude, getLongitude y getSubscriberId.\newline
 Finalmente, se define una serie de pasos que permiten aplicar las políticas de
 anotación definidas, y esos pasos son automatizados mediante el generador de
 anotaciones.
