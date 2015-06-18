@@ -1,31 +1,10 @@
 \section{Trabajos Relacionados}
 \label{sec:trabajo}
-\subsection{Clasificación de Sources y Sinks(SuSi)}
-\label{sec:susi}
-En el ámbito de análisis de seguridad de aplicaciones, independientemente del
-tipo de análisis, estático o dinámico, el punto de partida es la definición de
-políticas de seguridad, los pasos sucesivos para detectar la perdida de
-información giran en torno a tales políticas.\newline
-Muchas de las propuestas para análisis de flujo de información en aplicaciones
-Android, parten de un listado de sources y sinks para definir sus políticas de
-privacidad. Así, en el grupo de \textbf{sources} se incluyen las fuentes de
-datos sensibles, mientras que en el grupo de \textbf{sinks}, se incluyen los
-medios o canales que podrían filtrar información sensible de forma no autorizada. 
-En consecuencia, la efectividad del análisis se ve limitada al listado de
-sources y sinks, y la veracidad de los mismos. El inconveniente con estos sources y sinks, es que su
-clasificación suele hacerse de forma manual, por tanto, existe mayor
-probabilidad de error u omisión.\newline
-Con el fin de precisar dicha clasificación, el trabajo de investigación
-\textbf{SuSi} propone el uso de machine-learning para la clasificación y
-categorización de sources y sinks, partiendo del código fuente de la API Android.
-La propuesta de análisis se materializa en una herramienta que: partiendo del
-código fuente de una determinada versión de la API de Android, retorna un
-listado con la respectiva categorización de sources y sinks.\newline
-El proceso de análisis se compone de dos rondas secuenciales: clasificación y
-categorización.\newline
-Así, la salida de la primera ronda: calsificación de sources y sinks, se
-convierte en entrada para la ronda de categorización, donde se definen
-diferentes tipos de categorías, 12 para sources y 15 para sinks.
+
+Esta sección presenta otras propuestas de solución existentes para el análisis
+de seguridad en aplicativos Android. Adicionalmente, indica el elemento
+diferenciador de la propuesta planteada(\ref{sec:propuesta}) frente a estas.
+
 \subsection{JOANA}
 \label{JOANA-Tool}
 JOANA (Java Object-sensitive ANAlysis)- Information Flow Control Framework for

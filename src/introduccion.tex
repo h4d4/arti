@@ -14,10 +14,10 @@ está fuera del alcance de este tipo de controles. Al no contar con herramientas
 de análisis de flujo de información en aplicaciones Android, o al utilizar
 librerías de terceros, para el desarrollador es difícil verificar
 el cumplimiento de políticas de confidencialidad e integridad en la aplicación
-próxima a liberar. Por consiguiente, el desarrollador no tiene cómo asegurar la
-ausencia de fugas de información en la aplicación.\newline
-Si bien, en el campo de aplicativos Android existen diferentes propuestas para
-detectar fuga de información, en su mayoría  se enfocan en precisión y
+próxima a liberar. Por consiguiente, el desarrollador no tiene cómo garantizarle
+al usuario que la aplicación que le provee no presenta fugas de información.\newline
+Ahora bien, aunque en el campo de aplicativos Android existen diferentes
+propuestas para detectar fuga de información, en su mayoría  se enfocan en precisión y
 eficiencia del análisis para detectar fugas de datos en aplicaciones de terceros
 ya implementadas. Estas propuestas no abordan el problema del lado del
 desarrollador, analizando flujos de información de la aplicación para verificar
@@ -31,9 +31,32 @@ el cumplimiento de políticas de seguridad.\newline
 % imposibilidad para detección de fugas mediante sentencias de control, por
 % ejemplo, la no detección de flujos implicitos.\newline 
 Ante esto, y con el fin de proveer una herramienta de apoyo al desarrollador, de
-modo que verifique el cumplimiento de políticas de seguridad en sus
-aplicaciones, el presente trabajo aborda el problema de fugas de información en
-aplicaciones Android, analizando flujos de información de la aplicación,
-mediante técnicas de lenguajes tipados de seguridad.\\
-El Articulo está organizado de la siguiente manera: XXX
+modo que pueda verificar el cumplimiento de políticas de seguridad desde la
+construcción de sus aplicaciones, el presente trabajo aborda el problema de
+fugas de información en aplicaciones Android, analizando flujos de información
+de la aplicación, mediante técnicas de lenguajes tipados de seguridad.\newline
+Así pues, en el presente trabajo se propone una herramienta para análisis de
+flujo de información de aplicativos Android mediante el sistema de anotaciones
+de Jif.\newline
+Dado que Jif permite
+anotar código Java pero no código Android, es decir, las anotaciones Jif son
+válidas para clases del lenguaje Java estándar, no para clases específicas de la
+API del framework Android, las cuales son indispensables para
+implementar las funcionalidades de aplicativos Android; la principal
+contribución de la propuesta consiste en: proveerle al desarrollador de
+aplicativos Android una herramienta que permite definir y verificar políticas de
+confidencialidad en sus aplicativos, mediante el sistema de anotaciones de
+Jif.\newline
+
+El resto del articulo está organizado de la siguiente manera: en la sección
+\ref{sec:context} se presentan conceptos para el contexto de analisis
+de fuga de información de aplicativos, en la sección \ref{sec:problema} se
+describe el problema en que se centra el trabajo de investigación, en la sección
+\ref{sec:propuesta} se describe la propuesta de solución para el problema
+descrito, en la sección \ref{sec:trabajo} se presentan trabajos relacionados y
+las diferencias de la propuesta planteada frente a estos, en la sección
+\ref{sec:eval} se presentan los resultados de evaluación de la propuesta, en la
+sección \ref{discusion} se elaboran algunas discusiones y se plantea trabajo
+futuro, finalmente en la sección \ref{conclusiones} se presentan las
+conclusiones.
 

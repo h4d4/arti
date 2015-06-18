@@ -1,4 +1,10 @@
 \section{Propuesta}
+\label{sec:propuesta}
+La presente sección inicia con una descripción de alto nivel del diseño de
+solución que se propone. Después, describe detalladamente los elementos que
+conforman la propuesta de solución: \ref{sub:politica} y
+\ref{sub:lineamientos}.\newline
+
 Para garantizarle al usuario que la aplicación que implementa respeta
 determinadas políticas de seguridad, el desarrollador Android requiere de una
 herramienta que le permita: primero definir las políticas de seguridad a
@@ -83,7 +89,7 @@ para anotaciones a la API Android y anotaciones a los aplicativos a
 analizar(lineamientos del anotador).
 
 \subsection{Definición de la política de seguridad}
-% \textit{Definición de la política de seguridad}:
+\label{sub:politica}
 Detectar si una aplicación Android presenta flujos de información entre:
 información con nivel de seguridad alto e información con nivel de seguridad bajo.\newline
 \textit{Información con nivel de seguridad alto}: la información
@@ -105,6 +111,7 @@ Este conjunto de sources y sinks es tomado del listado proveído por el
 clasificador SuSi \ref{sec:susi}.
 
 \subsection{Lineamientos de anotación}
+\label{sub:lineamientos}
 Los lineamientos de anotación definen los elementos básicos de anotación
 \ref{subsec:elements}, anotaciones necesarias para la API de Android
 \ref{subsec:api} y anotaciones en los aplicativos a analizar \ref{subsec:anotador}.

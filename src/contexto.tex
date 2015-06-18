@@ -1,4 +1,13 @@
 \section{Contexto}
+\label{sec:context}
+En esta sección se presentan conceptos y herramientas necesarias para
+contextualizar el tema de investigación: Análisis de flujo de información en
+apliaciones Android.
+Así, la sección inicia describiendo en qué consisten las aplicaciones Android. Luego presenta
+las técnicas de análisis de código con que suelen analizarce estas aplicaciones.
+Después, expone los conceptos de sources y sinks. Finalmente, describe un
+lenguaje tipado de seguridad para análisis de flujo de información en
+aplicativos Java(Jif).
 \subsection{Aplicaciones Android}
 En esencia una aplicación Android es una aplicación Java con interfaces
 descritas en sintaxis XML, cuya ejecución es activada por el framework la API
@@ -102,6 +111,32 @@ acorde a su tipo.\newline
 El compilador realiza el chequeo de tipos, partiendo del conjunto de labels de
 seguridad. Así, si el programa pasa el chequeo de tipos y compila correctamente,
 se espera que cumpla con las políticas de control de flujo evaluadas.
+\subsection{Clasificación de Sources y Sinks(SuSi)}
+\label{sec:susi}
+En el ámbito de análisis de seguridad de aplicaciones, independientemente del
+tipo de análisis, estático o dinámico, el punto de partida es la definición de
+políticas de seguridad, los pasos sucesivos para detectar la perdida de
+información giran en torno a tales políticas.\newline
+Muchas de las propuestas para análisis de flujo de información en aplicaciones
+Android, parten de un listado de sources y sinks para definir sus políticas de
+privacidad. Así, en el grupo de \textbf{sources} se incluyen las fuentes de
+datos sensibles, mientras que en el grupo de \textbf{sinks}, se incluyen los
+medios o canales que podrían filtrar información sensible de forma no autorizada. 
+En consecuencia, la efectividad del análisis se ve limitada al listado de
+sources y sinks, y la veracidad de los mismos. El inconveniente con estos sources y sinks, es que su
+clasificación suele hacerse de forma manual, por tanto, existe mayor
+probabilidad de error u omisión.\newline
+Con el fin de precisar dicha clasificación, el trabajo de investigación
+\textbf{SuSi} propone el uso de machine-learning para la clasificación y
+categorización de sources y sinks, partiendo del código fuente de la API Android.
+La propuesta de análisis se materializa en una herramienta que: partiendo del
+código fuente de una determinada versión de la API de Android, retorna un
+listado con la respectiva categorización de sources y sinks.\newline
+El proceso de análisis se compone de dos rondas secuenciales: clasificación y
+categorización.\newline
+Así, la salida de la primera ronda: calsificación de sources y sinks, se
+convierte en entrada para la ronda de categorización, donde se definen
+diferentes tipos de categorías, 12 para sources y 15 para sinks.
 
 \subsection{JIF(Java Information Flow)}
 % \subsubsection{Sistema de anotaciones en Jif}
